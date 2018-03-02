@@ -654,7 +654,7 @@ const tool = _ => {
       db.dipper = false;
       db.eraser = true;
     },
-    status: _ => return db;
+    status: _ => db
   };
 };
 
