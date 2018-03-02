@@ -3,7 +3,7 @@ let namespace = "pam";
 /**
  * @author Frank Dip
  * @desc Pixel Art Maker
- * Cleaned up some mistakes in tool variable.
+ * Not using JS design pattern Module yet.
  * TODO: Refactor to DRY code
  * @version 1.3
  */
@@ -635,27 +635,27 @@ const pixel = [
 
 /**
  * @desc Keeps track of which tool is active
+ * TODO: Test if JS design module can be used.
  */
-const tool = _ => {
-  const db = {paint: true, dipper: false, eraser: false};
-  return {
-    painting: _ => {
-      db.paint = true,
-      db.dipper = false,
-      db.eraser = false
-    },
-    dipping: _ => {
-      db.paint = false;
-      db.dipper = true;
-      db.eraser = false;
-    },
-    erasing: _ => {
-      db.paint = false;
-      db.dipper = false;
-      db.eraser = true;
-    },
-    status: _ => db
-  };
+const tool = {
+  paint: true,
+  dipper: false,
+  eraser: false,
+  painting: function() {
+    this.paint = true,
+    this.dipper = false,
+    this.eraser = false
+  },
+  dipping: function() {
+    this.paint = false;
+    this.dipper = true;
+    this.eraser = false;
+  },
+  erasing: function() {
+    this.paint = false;
+    this.dipper = false;
+    this.eraser = true;
+  }
 };
 
 /**
@@ -916,24 +916,24 @@ $sizePicker.on("submit", event => {
  * @desc Sets the paint tool to true and active
  */
 $toolPaint.on("click", _ => {
-  tool().painting();
-  toolSetClass(tool().status());
+  tool.painting();
+  toolSetClass(tool);
 });
 
 /**
  * @desc Sets the dipper tool to true and active
  */
 $toolDipper.on("click", _ => {
-  tool().dipping();
-  toolSetClass(tool().status());
+  tool.dipping();
+  toolSetClass(tool);
 });
 
 /**
  * @desc Sets the erase tool to true and active
  */
 $toolEraser.on("click", _ => {
-  tool().erasing();
-  toolSetClass(tool().status());
+  tool.erasing();
+  toolSetClass(tool);
 });
 
 /**
@@ -942,12 +942,12 @@ $toolEraser.on("click", _ => {
  */
 $table.on("mousedown mouseover", "td", event => {
   if (event.which === 1) {
-    if (tool().status().paint === true) {
+    if (tool.paint === true) {
       $(event.target).css("background-color", $colorPicker.val());
-    } else if (tool().status().dipper === true) {
+    } else if (tool.dipper === true) {
       const hex = rgba2hex($(event.target).css("background-color"));
       $colorPicker.val(hex);
-    } else if (tool().status().eraser === true) {
+    } else if (tool.eraser === true) {
       $(event.target).css("background-color", "");
     }
   }
