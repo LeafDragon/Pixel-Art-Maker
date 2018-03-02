@@ -3,6 +3,7 @@ let namespace = "pam";
 /**
  * @author Frank Dip
  * @desc Pixel Art Maker
+ * Cleaned up some mistakes in tool variable.
  * TODO: Refactor to DRY code
  * @version 1.3
  */
@@ -635,31 +636,25 @@ const pixel = [
 /**
  * @desc Keeps track of which tool is active
  */
-const tool = function() {
-  const db = {
-    paint: true;
-    dipper: false;
-    eraser: false;
-  };
+const tool = _ => {
+  const db = {paint: true, dipper: false, eraser: false};
   return {
-    painting: function() {
+    painting: _ => {
       db.paint = true,
       db.dipper = false,
       db.eraser = false
     },
-    dipping: function() {
+    dipping: _ => {
       db.paint = false;
       db.dipper = true;
       db.eraser = false;
     },
-    erasing: function() {
+    erasing: _ => {
       db.paint = false;
       db.dipper = false;
       db.eraser = true;
     },
-    status: function() {
-      return db;
-    }
+    status: _ => return db;
   };
 };
 
