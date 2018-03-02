@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>Pixel Art Maker</title>
+    <meta name="description" content="Pixel Art Maker. Using PUG, Bootstrap, SCSS, jQuery, HTML2canvas, and Font awesome. Version 1.2.">
+    <meta name="author" content="Frank Dip">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="styles\styles.min.css" rel="stylesheet">
+    <script defer="" src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+  </head>
+  <body>
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="navbar-brand"><a href="https://codepen.io/LeafDragon/" target="_blank"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1580937/profile/profile-512.jpg?1519351323" width="50px" data-toggle="tooltip" title="Leaf Dragon"></a> Pixel Art Maker</div>
+      <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
+      <div id="navbarSupportedContent" class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item dropdown"><a id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">File</a>
+            <div aria-labelledby="navbarDropdown" class="dropdown-menu"><a id="pam-save-png" href="#" class="dropdown-item"><i class="fas fa-download"></i> Save PNG</a><a id="pam-save-jpeg" href="#" class="dropdown-item"><i class="fas fa-download"></i> Save JPEG</a>
+              <div class="dropdown-divider"></div><a href="#" data-toggle="modal" data-target="#pam-delete--confirmation" class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a>
+            </div>
+          </li>
+          <li class="nav-item dropdown"><a id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Border</a>
+            <div aria-labelledby="navbarDropdown" class="dropdown-menu"><a id="pam-border--default" href="#" class="dropdown-item"><i class="fas fa-table"></i> Default</a>
+              <div class="dropdown-divider"></div><a id="pam-border--less" href="#" class="dropdown-item"><i class="far fa-square"></i> Borderless</a>
+              <div class="dropdown-divider"></div>
+              <input id="pam-border--color" type="color" value="#4DB6AC" data-toggle="tooltip" title="Border color" class="form-control mr-sm-2">
+            </div>
+          </li>
+          <li class="nav-item dropdown"><a id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Pixel Art</a>
+            <div id="pam-pixel-art" aria-labelledby="navbarDropdown" class="dropdown-menu"></div>
+          </li>
+          <li class="nav-item dropdown"><a id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Help</a>
+            <div aria-labelledby="navbarDropdown" class="dropdown-menu"><a href="#" data-toggle="modal" data-target="#pam-help--view" class="dropdown-item"><i class="fas fa-question-circle"></i> View Help</a>
+              <div class="dropdown-divider"></div><a href="#" data-toggle="modal" data-target="#pam-help--about" class="dropdown-item"><i class="fas fa-info-circle"></i> About</a>
+            </div>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input id="pam-color-picker" type="color" data-toggle="tooltip" title="Paint brush color" class="form-control mr-sm-2">
+        </form>
+        <form id="pam-size-picker" class="form-inline my-2 my-lg-0">
+          <label class="nav-link text-white pam-label">Width:
+            <input id="pam-size-picker--width" type="number" min="1" max="40" value="20" required="required" class="form-control mr-sm-2">
+          </label>
+          <label class="nav-link text-white pam-label">Height:
+            <input id="pam-size-picker--height" type="number" min="1" max="48" value="20" required="required" class="form-control mr-sm-2">
+          </label><a data-toggle="modal" data-target="#pam-size-picker--modal" class="btn btn-outline-primary my-2 my-sm-0 text-white"><i class="fas fa-table"></i> Submit</a>
+        </form>
+      </div>
+    </nav>
+    <!-- Bootstrap container fluid-->
+    <div class="container-fluid">
+      <!-- Bootstrap nav tab-->
+      <nav>
+        <ul class="nav nav-tabs justify-content-center">
+          <li class="nav-item"><a id="pam-tool--paint" href="#" data-toggle="tooltip" title="Paint brush" class="nav-link active"><i class="fas fa-paint-brush fa-2x"></i></a></li>
+          <li class="nav-item"><a id="pam-tool--dipper" href="#" data-toggle="tooltip" title="Dipper" class="nav-link"><i class="fas fa-eye-dropper fa-2x"></i></a></li>
+          <li class="nav-item"><a id="pam-tool--eraser" href="#" data-toggle="tooltip" title="Eraser" class="nav-link"><i class="fas fa-eraser fa-2x"></i></a></li>
+        </ul>
+      </nav>
+      <main class="text-center pam-main">
+        <table id="pam-table"></table>
+      </main>
+    </div>
+    <!-- Modal Submit -->
+    <div id="pam-size-picker--modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
+      <div role="document" class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-warning">
+            <h5 class="modal-title"><i class="fas fa-exclamation-circle"></i> Submit?</h5>
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+          </div>
+          <div class="modal-body">Do you want to recreate the table elements?</div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
+            <button id="pam-size-picker--submit" type="button" data-dismiss="modal" class="btn btn-warning"><i class="fas fa-exclamation-circle"></i> Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Delete -->
+    <div id="pam-delete--confirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade">
+      <div role="document" class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-danger">
+            <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Delete?</h5>
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+          </div>
+          <div class="modal-body">Do you want to delete the table elements?</div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
+            <button id="pam-delete--button" type="button" data-dismiss="modal" class="btn btn-danger"><i class="fas fa-exclamation-triangle"></i> Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal help view -->
+    <div id="pam-help--view" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" class="modal fade">
+      <div role="document" class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-info text-white">
+            <h5 class="modal-title"><i class="fas fa-question-circle"></i> Help</h5>
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+          </div>
+          <div id="pam-help--view--body" class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal help about -->
+    <div id="pam-help--about" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" class="modal fade">
+      <div role="document" class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-info text-white">
+            <h5 class="modal-title"><i class="fas fa-info-circle"></i> About</h5>
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Title: Pixel Art Maker</p>
+            <p>Author: Frank Dip</p>
+            <p>Description: Pixel Art Maker. Using PUG, Bootstrap, SCSS, jQuery, HTML2canvas, and Font awesome. Version 1.2.</p>
+            <p>Link: <a href="https://codepen.io/LeafDragon/" target="_blank">Leaf Dragon(new tab)</a></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-secondary">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Script -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="script\script.js"></script>
+  </body>
+</html>

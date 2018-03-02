@@ -1,0 +1,233 @@
+//output: index.html
+
+- var namespace = "pam"
+
+//- Increased the size of the tool icons
+
+- var author = "Frank Dip"
+- var version = "Version 1.2"
+- var title = "Pixel Art Maker"
+- var description = "Pixel Art Maker. Using PUG, Bootstrap, SCSS, jQuery, HTML2canvas, and Font awesome. " + version + "."
+- var link = "https://codepen.io/LeafDragon/";
+
+//- Variable Chain
+//-  File
+- var savePNG = namespace + "-save-png"
+- var saveJPEG = namespace + "-save-jpeg"
+- var deleteConfirmation = namespace + "-delete--confirmation"
+- var deleteButton = namespace + "-delete--button"
+
+//- Border
+- var border = namespace + "-border"
+- var borderDefault = namespace + "-border--default"
+- var borderLess = namespace + "-border--less"
+- var borderColor = border + "--color"
+
+//- Pixel Art
+- var pixelArt = namespace + "-pixel-art"
+
+//- Help
+- var help = namespace + "-help"
+- var helpView = namespace + "-help--view"
+- var helpViewBody = namespace + "-help--view--body"
+- var helpAbout = namespace + "-help--about"
+
+//- Color Picker
+- var colorPicker = namespace +"-color-picker"
+
+//- Size Picker
+- var sizePicker = namespace + "-size-picker"
+- var sizePickerWidth = sizePicker + "--width"
+- var sizePickerHeight = sizePicker + "--height"
+- var sizePickerModal = sizePicker + "--modal"
+- var sizePickerSubmit = sizePicker + "--submit"
+- var label = namespace + "-label" 
+
+//- Tool
+- var tool = namespace + "-tool"
+- var toolPaint = tool + "--paint"
+- var toolDipper = tool + "--dipper"
+- var toolEraser = tool + "--eraser"
+
+//- Main
+- var main = namespace + "-main"
+- var table = namespace + "-table"
+
+doctype html
+html(lang="en-US")
+  head
+    meta(charset="utf-8")
+    title #{title}
+    meta(name="description", content=description)
+    meta(name="author", content="Frank Dip")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0, shrink-to-fit=no")
+    link(href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    )
+    link(href="styles\\styles.min.css", rel="stylesheet")
+    script(defer="", src="https://use.fontawesome.com/releases/v5.0.7/js/all.js")
+  body
+    // Bootstrap Navbar 
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top
+      div.navbar-brand
+        a(href=link, target="_blank")
+          img(src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1580937/profile/profile-512.jpg?1519351323", width="50px", data-toggle="tooltip", title="Leaf Dragon")
+        |  Pixel Art Maker
+      button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+        span.navbar-toggler-icon
+      #navbarSupportedContent.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+          li.nav-item.dropdown
+            a#navbarDropdown.nav-link.dropdown-toggle(href="#", role="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+              | File
+            .dropdown-menu(aria-labelledby="navbarDropdown")
+              a.dropdown-item(id=savePNG, href="#")
+                i.fas.fa-download
+                |  Save PNG
+              a.dropdown-item(id=saveJPEG, href="#")
+                i.fas.fa-download
+                |  Save JPEG
+              .dropdown-divider
+              a.dropdown-item(href="#", data-toggle="modal" data-target="#" + deleteConfirmation)
+                i.fas.fa-trash-alt
+                |  Delete
+          li.nav-item.dropdown
+            a#navbarDropdown.nav-link.dropdown-toggle(href="#", role="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+              | Border
+            .dropdown-menu(aria-labelledby="navbarDropdown")
+              a.dropdown-item(id=borderDefault, href="#")
+                i.fas.fa-table
+                |  Default
+              .dropdown-divider
+              a.dropdown-item(id=borderLess, href="#")
+                i.far.fa-square
+                |  Borderless
+              .dropdown-divider
+              input.form-control.mr-sm-2(id=borderColor, type="color", value="#4DB6AC", data-toggle="tooltip", title="Border color")
+          li.nav-item.dropdown
+            a#navbarDropdown.nav-link.dropdown-toggle(href="#", role="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+              | Pixel Art
+            .dropdown-menu(id=pixelArt, aria-labelledby="navbarDropdown")
+          li.nav-item.dropdown
+            a#navbarDropdown.nav-link.dropdown-toggle(href="#", role="button", data-toggle="dropdown", aria-haspopup="true", aria-expanded="false")
+              | Help
+            .dropdown-menu(aria-labelledby="navbarDropdown")
+              a.dropdown-item(href="#", data-toggle="modal", data-target="#" + helpView)
+                i.fas.fa-question-circle
+                |  View Help
+              .dropdown-divider
+              a.dropdown-item(href="#", data-toggle="modal", data-target="#" + helpAbout)
+                i.fas.fa-info-circle
+                |  About
+        form.form-inline.my-2.my-lg-0
+          input.form-control.mr-sm-2(id=colorPicker, type="color", data-toggle="tooltip", title="Paint brush color")
+        form.form-inline.my-2.my-lg-0(id=sizePicker)
+          label.nav-link.text-white(class=label) Width:
+            input.form-control.mr-sm-2(id=sizePickerWidth, type="number", min="1", max="40", value="20", required="required")
+          label.nav-link.text-white(class=label) Height:
+            input.form-control.mr-sm-2(id=sizePickerHeight, type="number", min="1", max="48", value="20", required="required")
+          a.btn.btn-outline-primary.my-2.my-sm-0.text-white(data-toggle="modal" data-target="#" + sizePickerModal)
+            i.fas.fa-table
+            |  Submit
+    
+    // Bootstrap container fluid
+    .container-fluid
+      // Bootstrap nav tab
+      nav
+        ul.nav.nav-tabs.justify-content-center
+          li.nav-item
+            a.nav-link.active(id=toolPaint, href="#", data-toggle="tooltip", title="Paint brush")
+              i.fas.fa-paint-brush.fa-2x
+          li.nav-item
+            a.nav-link(id=toolDipper, href="#", data-toggle="tooltip", title="Dipper")
+              i.fas.fa-eye-dropper.fa-2x
+          li.nav-item
+            a.nav-link(id=toolEraser, href="#", data-toggle="tooltip", title="Eraser")
+              i.fas.fa-eraser.fa-2x
+
+      main.text-center(class=main)
+        table(id=table)
+
+    // Modal Submit 
+    .modal.fade(id=sizePickerModal, tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header.bg-warning
+            h5.modal-title
+              i.fas.fa-exclamation-circle
+              |  Submit?
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            | Do you want to recreate the table elements?
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            button.btn.btn-warning(id=sizePickerSubmit, type='button', data-dismiss='modal')
+              i.fas.fa-exclamation-circle
+              |  Submit
+    // Modal Delete 
+    .modal.fade(id=deleteConfirmation, tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header.bg-danger
+            h5.modal-title
+              i.fas.fa-exclamation-triangle
+              |  Delete?
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            | Do you want to delete the table elements?
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            button.btn.btn-danger(id=deleteButton, type='button', data-dismiss='modal')
+              i.fas.fa-exclamation-triangle
+              |  Delete
+    // Modal help view 
+    .modal.fade(id=helpView, tabindex='-1', role='dialog', aria-labelledby='exampleModalLongTitle', aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header.bg-info.text-white
+            h5.modal-title
+              i.fas.fa-question-circle
+              |  Help
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body(id=helpViewBody)
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+    // Modal help about 
+    .modal.fade(id=helpAbout, tabindex="-1", role="dialog", aria-labelledby="exampleModalCenterTitle", aria-hidden="true")
+      .modal-dialog.modal-dialog-centered(role="document")
+        .modal-content
+          .modal-header.bg-info.text-white
+            h5.modal-title
+              i.fas.fa-info-circle
+              |  About
+            button.close(type="button", data-dismiss="modal", aria-label="Close")
+              span(aria-hidden="true") ×
+          .modal-body
+            p Title: #{title}
+            p Author: #{author}
+            p Description: #{description}
+            p Link: 
+              a(href=link, target="_blank") Leaf Dragon(new tab)
+          .modal-footer
+            button.btn.btn-secondary(type="button", data-dismiss="modal") Close
+
+    // Script 
+    script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    )
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    )
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    )
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js")
+    script(src="script\\script.js")
