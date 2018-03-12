@@ -3,7 +3,7 @@ $namespace: pam;
 /// @author Frank Dip
 /// Pixel Art
 /// TODO: Look for ways to refactor
-/// @version 1.1
+/// @version 1.2
 
  /********************************************//**
   * Animation
@@ -63,10 +63,7 @@ td {
   height: 20px;
   @extend %cursor---pointer;
   background-color: #FFF;
-
-  &:hover {
-    @extend %reticle;
-  }
+  &:hover {@extend %reticle;}
 }
 
 /********************************************//**
@@ -74,17 +71,15 @@ td {
  ***********************************************/
 
 ##{$namespace} {
-
   &-border--color {
     @extend %padding---zero;
     @extend %cursor---pointer;
   }
-
   &-color-picker {
     @extend %padding---zero;
     @extend %cursor---pointer;
-    width: 50px;
-    height: 40px;
+    width: 40px;
+    height: 35px;
   }
 }
 
@@ -93,8 +88,10 @@ td {
  ***********************************************/
 
 .#{$namespace} {
-
   &-label {@extend %cursor---pointer;}
-
-  &-main {margin: 1em auto;}
+  
+  &-main {
+    margin: 1em auto;
+    &--size-picker {margin-bottom: 1em;}
+  }
 }

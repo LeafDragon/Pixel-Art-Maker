@@ -2,10 +2,8 @@
 
 - var namespace = "pam"
 
-//- Increased the size of the tool icons
-
 - var author = "Frank Dip"
-- var version = "Version 1.2"
+- var version = "Version 1.3"
 - var title = "Pixel Art Maker"
 - var description = "Pixel Art Maker. Using PUG, Bootstrap, SCSS, jQuery, HTML2canvas, and Font awesome. " + version + "."
 - var link = "https://codepen.io/LeafDragon/";
@@ -32,8 +30,12 @@
 - var helpViewBody = namespace + "-help--view--body"
 - var helpAbout = namespace + "-help--about"
 
-//- Color Picker
+//- Tool
 - var colorPicker = namespace +"-color-picker"
+- var tool = namespace + "-tool"
+- var toolPaint = tool + "--paint"
+- var toolDipper = tool + "--dipper"
+- var toolEraser = tool + "--eraser"
 
 //- Size Picker
 - var sizePicker = namespace + "-size-picker"
@@ -41,16 +43,11 @@
 - var sizePickerHeight = sizePicker + "--height"
 - var sizePickerModal = sizePicker + "--modal"
 - var sizePickerSubmit = sizePicker + "--submit"
-- var label = namespace + "-label" 
-
-//- Tool
-- var tool = namespace + "-tool"
-- var toolPaint = tool + "--paint"
-- var toolDipper = tool + "--dipper"
-- var toolEraser = tool + "--eraser"
+- var label = namespace + "-label"
 
 //- Main
 - var main = namespace + "-main"
+- var mainSizePicker = main + "--size-picker"
 - var table = namespace + "-table"
 
 doctype html
@@ -121,33 +118,41 @@ html(lang="en-US")
               a.dropdown-item(href="#", data-toggle="modal", data-target="#" + helpAbout)
                 i.fas.fa-info-circle
                 |  About
-        form.form-inline.my-2.my-lg-0
-          input.form-control.mr-sm-2(id=colorPicker, type="color", data-toggle="tooltip", title="Paint brush color")
-        form.form-inline.my-2.my-lg-0(id=sizePicker)
-          label.nav-link.text-white(class=label) Width:
-            input.form-control.mr-sm-2(id=sizePickerWidth, type="number", min="1", max="40", value="20", required="required")
-          label.nav-link.text-white(class=label) Height:
-            input.form-control.mr-sm-2(id=sizePickerHeight, type="number", min="1", max="48", value="20", required="required")
-          a.btn.btn-outline-primary.my-2.my-sm-0.text-white(data-toggle="modal" data-target="#" + sizePickerModal)
-            i.fas.fa-table
-            |  Submit
     
     // Bootstrap container fluid
     .container-fluid
       // Bootstrap nav tab
       nav
         ul.nav.nav-tabs.justify-content-center
-          li.nav-item
-            a.nav-link.active(id=toolPaint, href="#", data-toggle="tooltip", title="Paint brush")
+          li.nav-item(data-toggle="tooltip", title="Paint brush color")
+            .nav-link
+              input.form-control.mr-sm-2(id=colorPicker, type="color")
+          li.nav-item(data-toggle="tooltip", title="Paint brush")
+            a.nav-link.active(id=toolPaint, href="#")
               i.fas.fa-paint-brush.fa-2x
-          li.nav-item
-            a.nav-link(id=toolDipper, href="#", data-toggle="tooltip", title="Dipper")
+          li.nav-item(data-toggle="tooltip", title="Dipper")
+            a.nav-link(id=toolDipper, href="#")
               i.fas.fa-eye-dropper.fa-2x
-          li.nav-item
-            a.nav-link(id=toolEraser, href="#", data-toggle="tooltip", title="Eraser")
+          li.nav-item(data-toggle="tooltip", title="Eraser")
+            a.nav-link(id=toolEraser, href="#")
               i.fas.fa-eraser.fa-2x
+          li.nav-item(data-toggle="tooltip", title="Size Picker")
+            a.nav-link(data-toggle="collapse", href="#" + mainSizePicker, role="button", aria-expanded="false", aria-controls="collapseExample")
+              i.fas.fa-table.fa-2x
 
       main.text-center(class=main)
+        // Bootstrap collapse for the size picker 
+        .collapse(id=mainSizePicker, class=mainSizePicker)
+          .card.card-body
+            form.form-inline.justify-content-center(id=sizePicker)
+              label.mb-2.mr-sm-2(class=label, for=sizePickerWidth) Width:
+              input.form-control.mb-2.mr-sm-2(id=sizePickerWidth, type="number", min="1", max="40", value="20", required="required")
+              label.mb-2.mr-sm-2(class=label, for=sizePickerHeight) Height:
+              input.form-control.mb-2.mr-sm-2(id=sizePickerHeight, type="number", min="1", max="48", value="20", required="required")
+              .form-check.mb-2.mr-sm-2
+                a.btn.btn-primary(data-toggle="modal" data-target="#" + sizePickerModal)
+                  i.fas.fa-table
+                  |  Submit
         table(id=table)
 
     // Modal Submit 
