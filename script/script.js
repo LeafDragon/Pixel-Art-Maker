@@ -5,7 +5,7 @@ let namespace = "pam";
  * @desc Pixel Art Maker
  * Not using JS design pattern Module yet.
  * TODO: Refactor to DRY code
- * @version 1.3
+ * @version 1.4
  */
 
 /********************************************//**
@@ -804,14 +804,14 @@ const helpViewBody = [
  * @desc Converts rgb to hex
  * @param {string} color_value Takes a string in rgb format
  */
-function rgba2hex( color_value ) {
-	if ( ! color_value ) return false;
+function rgba2hex(color_value) {
+	if (!color_value) return false;
 	let parts = color_value.toLowerCase().match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/),
 	    length = color_value.indexOf('rgba') ? 3 : 2; // Fix for alpha values
 	delete(parts[0]);
-	for ( var i = 1; i <= length; i++ ) {
+	for (var i = 1; i <= length; i++) {
 		parts[i] = parseInt( parts[i] ).toString(16);
-		if ( parts[i].length == 1 ) parts[i] = '0' + parts[i];
+		if (parts[i].length == 1) parts[i] = '0' + parts[i];
 	}
 	return '#' + parts.join('').toUpperCase(); // #F7F7F7
 }
@@ -939,19 +939,18 @@ $toolEraser.on("click", _ => {
 /**
  * @desc Allows to paint on the table
  * @param {event} event Uses the event target to select each td
+ * @param {boolean} down Used to determine if the paintTool should be active
+ * @param {object} tool Used to determine which tool is active
  */
-$table.on("mousedown mouseover", "td", event => {
-  if (event.which === 1) {
-    if (tool.paint === true) {
-      $(event.target).css("background-color", $colorPicker.val());
-    } else if (tool.dipper === true) {
-      const hex = rgba2hex($(event.target).css("background-color"));
-      $colorPicker.val(hex);
-    } else if (tool.eraser === true) {
-      $(event.target).css("background-color", "");
-    }
-  }
-});
+(_ => {
+  let down = false;
+  $table.on("mousedown", "td", event => {
+    down = true;
+    toolBar(event, down, tool);
+  }).on("mouseover", "td", event => toolBar(event, down, tool))
+  .on("mouseup", _ => down = false)
+  .on("mouseleave", _ => down = false);
+})();
 
 /**
  * @desc Erases the background color to default on double click
@@ -1080,6 +1079,25 @@ function toolSetClass(ele) {
     $toolEraser.addClass("active");
   } else if (ele.eraser === false) {
     $toolEraser.removeClass("active");
+  }
+}
+
+/**
+ * @desc Paints the canvas table
+ * @param {event} event Sets the event from the target
+ * @param {boolean} down Sets if the tool should be active
+ * @param {object} tool Uses data from the object for which to use
+ */
+function toolBar(event, down, tool) {
+  if (down) {
+    if (tool.paint === true) {
+      $(event.target).css("background-color", $colorPicker.val());
+    } else if (tool.dipper === true) {
+      const hex = rgba2hex($(event.target).css("background-color"));
+      $colorPicker.val(hex);
+    } else if (tool.eraser === true) {
+      $(event.target).css("background-color", "");
+    }
   }
 }
 
