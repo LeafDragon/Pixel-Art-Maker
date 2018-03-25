@@ -22,7 +22,8 @@ const $borderDefault = $(`#${namespace}-border--default`);
 const $borderLess = $(`#${namespace}-border--less`);
 const $borderColor = $(`#${namespace}-border--color`);
 
-const $navPixelArt = $(`#${namespace}-pixel-art`);
+const $pixelArtPikachu = $(`#${namespace}-pixel-art--pikachu`);
+const $pixelArtPokeball = $(`#${namespace}-pixel-art--pokeball`);
 
 const $colorPicker = $(`#${namespace}-color-picker`);
 
@@ -659,148 +660,6 @@ const tool = {
 };
 
 /**
- * @desc
- */
-const helpViewBody = [
-  {
-    nav: {
-      primary: "File > ",
-      sub: "Save PNG "
-    },
-    fa: ["fas", "fa-download"],
-    text: "will save a png file of the drawn pixel art."
-  },
-  {
-    nav: {
-      primary: "File > ",
-      sub: "Save JPEG "
-    },
-    fa: ["fas", "fa-download"],
-    text: "will save a jpeg file of the drawn pixel art."
-  },
-  {
-    nav: {
-      primary: "File > ",
-      sub: "Delete "
-    },
-    fa: ["fas", "fa-trash-alt"],
-    text: "will delete the canvas."
-  },
-  {
-    nav: {
-      primary: "Border > ",
-      sub: "Default "
-    },
-    fa: ["fas", "fa-table"],
-    text: "will delete the canvas."
-  },
-  {
-    nav: {
-      primary: "Border > ",
-      sub: "Borderless "
-    },
-    fa: ["fas", "fa-square"],
-    text: "will color the border white."
-  },
-  {
-    nav: {
-      primary: "Border > ",
-      sub: "Color "
-    },
-    fa: ["far", "fa-square"],
-    text: "will color the border to selected color."
-  },
-  {
-    nav: {
-      primary: "Pixel Art > ",
-      sub: "ピカチュー "
-    },
-    fa: ["fas", "fa-th-large"],
-    text: "will draw Pikachu."
-  },
-  {
-    nav: {
-      primary: "Pixel Art > ",
-      sub: "Pokeball "
-    },
-    fa: ["fas", "fa-th-large"],
-    text: "will draw a pokeball."
-  },
-  {
-    nav: {
-      primary: "Help > ",
-      sub: "View Help "
-    },
-    fa: ["fas", "fa-question-circle"],
-    text: "will display the help documentation."
-  },
-  {
-    nav: {
-      primary: "Help > ",
-      sub: "About "
-    },
-    fa: ["fas", "fa-info-circle"],
-    text: "will display the description."
-  },
-  {
-    nav: {
-      sub: "Color "
-    },
-    fa: ["far", "fa-square"],
-    text: "will color the paint to selected color."
-  },
-  {
-    nav: {
-      sub: "Width "
-    },
-    fa: ["far", "fa-square"],
-    text: "will set the width of the canvas."
-  },
-  {
-    nav: {
-      sub: "Height "
-    },
-    fa: ["far", "fa-square"],
-    text: "will set the height of the canvas."
-  },
-  {
-    nav: {
-      sub: "Submit "
-    },
-    fa: ["far", "fa-square"],
-    text: "will submit the form with the width and height information."
-  },
-  {
-    nav: {
-      sub: "Paint "
-    },
-    fa: ["fas", "fa-paint-brush"],
-    text: "will select the paint brush."
-  },
-  {
-    nav: {
-      sub: "Dipper "
-    },
-    fa: ["fas", "fa-eye-dropper"],
-    text: "will select the dipper to copy the selected color."
-  },
-  {
-    nav: {
-      sub: "Erase "
-    },
-    fa: ["fas", "fa-eraser"],
-    text: "will select the eraser to erase the selected target."
-  },
-  {
-    nav: {
-      sub: "Double Click "
-    },
-    fa: ["fas", "fa-eraser"],
-    text: "will erase the selected target with a double click."
-  }
-];
-
-/**
  * @desc Converts rgb to hex
  * @param {string} color_value Takes a string in rgb format
  */
@@ -827,9 +686,7 @@ function rgba2hex(color_value) {
   * Makes the bootstrap tooltip work
   */
 $(_ => {
-  pixel.forEach(ele => makeNavPixelArt(ele));
   drawPixel(pixel[0]);
-  helpViewBody.forEach(ele => makeHelpViewBody(ele));
   $tooltip.tooltip();
 });
 
@@ -899,6 +756,18 @@ $borderColor.on("click change", _ => {
 });
 
 /**
+ * @desc Creates the piakchu pixel art
+ * @param {object} pixel[0] Object with pikachu art
+ */
+$pixelArtPikachu.click(_ => drawPixel(pixel[0]));
+
+/** 
+ * @desc Creates the pokeball pixel art
+ * @param {object} pixel[1] Object with pokeball art
+ */
+$pixelArtPokeball.click(_ => drawPixel(pixel[1]));
+
+/**
  * @desc Submits the form
  */
 $sizePickerSubmit.click(_ => $sizePicker.submit());
@@ -962,103 +831,6 @@ $table.on("dblclick", "td", event => {
 /********************************************//**
  * View
  ***********************************************/
-
-/**
- * @desc Makes drop down links for the art.
- * Make the modal body for pixel art
- * @param {object} ele Takes an object to make the links
- */
-function makeNavPixelArt(ele) {
-  const a = document.createElement("a");
-  const i = document.createElement("i");
-  const textNode = document.createTextNode(ele.name);
-  const spacer = document.createTextNode(" ");
-
-  const modal = document.createElement("div");
-  const modalDialog = document.createElement("div");
-  const modalDialogContent = document.createElement("div");
-  const modalDialogContentHeader = document.createElement("div");
-  const modalDialogContentHeaderH5 = document.createElement("h5");
-  const modalDialogContentHeaderH5TextNode = document.createTextNode(` ${ele.name}?`);
-  const modalDialogContentHeaderBtn = document.createElement("button");
-  const modalDialogContentHeaderBtnSpan = document.createElement("span");
-  const modalDialogContentBody = document.createElement("div");
-  const modalDialogContentFooter = document.createElement("div");
-  const modalDialogContentFooterBtnClose = document.createElement("button");
-  const modalDialogContentFooterBtnDraw = document.createElement("button");
-  const modalDialogContentFooterBtnDrawTextNode = document.createTextNode(` ${ele.name}`);
-
-  const iWarning = document.createElement("i");
-
-  a.classList.add("dropdown-item");
-  a.href = "#";
-  a.setAttribute("data-toggle", "modal");
-  a.setAttribute("data-target", `#${ele.modal.id}`);
-  a.appendChild(i);
-  a.appendChild(spacer);
-  a.appendChild(textNode);
-
-  i.classList.add("fas", "fa-th-large");
-
-  modal.id = `${ele.modal.id}`;
-  modal.classList.add("modal", "fade");
-  modal.setAttribute("tabindex", "-1");
-  modal.setAttribute("role", "dialog");
-  modal.setAttribute("aria-labelledby", "exampleModalLabel");
-  modal.setAttribute("aria-hidden", "true");
-  modal.appendChild(modalDialog);
-
-  modalDialog.classList.add("modal-dialog");
-  modalDialog.setAttribute("role", "document");
-  modalDialog.appendChild(modalDialogContent);
-
-  modalDialogContent.classList.add("modal-content")
-  modalDialogContent.appendChild(modalDialogContentHeader);
-  modalDialogContent.appendChild(modalDialogContentBody);
-  modalDialogContent.appendChild(modalDialogContentFooter);
-
-  modalDialogContentHeader.classList.add("modal-header", "bg-warning");
-  modalDialogContentHeader.appendChild(modalDialogContentHeaderH5);
-  modalDialogContentHeader.appendChild(modalDialogContentHeaderBtn);
-
-  modalDialogContentHeaderH5.classList.add("modal-title");
-  modalDialogContentHeaderH5.appendChild(iWarning);
-  modalDialogContentHeaderH5.appendChild(modalDialogContentHeaderH5TextNode);
-
-  modalDialogContentHeaderBtn.classList.add("close");
-  modalDialogContentHeaderBtn.setAttribute("type", "button");
-  modalDialogContentHeaderBtn.setAttribute("data-dismiss", "modal");
-  modalDialogContentHeaderBtn.setAttribute("aria-label", "close");
-  modalDialogContentHeaderBtn.appendChild(modalDialogContentHeaderBtnSpan);
-
-  modalDialogContentHeaderBtnSpan.setAttribute("aria-hidden", "true");
-  modalDialogContentHeaderBtnSpan.innerHTML = "&times;";
-
-  modalDialogContentBody.classList.add("modal-body");
-  modalDialogContentBody.innerText = `Do you want to recreate the table elements with a ${ele.name} pixel art?`;
-
-  modalDialogContentFooter.classList.add("modal-footer");
-  modalDialogContentFooter.appendChild(modalDialogContentFooterBtnClose);
-  modalDialogContentFooter.appendChild(modalDialogContentFooterBtnDraw);
-
-  modalDialogContentFooterBtnClose.classList.add("btn", "btn-secondary");
-  modalDialogContentFooterBtnClose.setAttribute("type", "button");
-  modalDialogContentFooterBtnClose.setAttribute("data-dismiss", "modal");
-  modalDialogContentFooterBtnClose.innerText = "Close";
-
-  modalDialogContentFooterBtnDraw.classList.add("btn", "btn-warning");
-  modalDialogContentFooterBtnDraw.setAttribute("type", "button");
-  modalDialogContentFooterBtnDraw.setAttribute("data-dismiss", "modal");
-  modalDialogContentFooterBtnDraw.appendChild(iWarning);
-  modalDialogContentFooterBtnDraw.appendChild(modalDialogContentFooterBtnDrawTextNode);
-  modalDialogContentFooterBtnDraw.addEventListener("click", _ => drawPixel(ele));
-
-  iWarning.classList.add("fas", "fa-exclamation-circle");
-
-  $navPixelArt.append(a);
-  $body.append(modal);
-}
-
 /**
  * @desc Changes the classes tools
  */
@@ -1137,28 +909,4 @@ function drawPixel(ele) {
       $(`tr:nth-child(${ele2.tr}) td:nth-child(${ele2.td})`).css("background", ele1.color);
     });
   });
-}
-
-/**
- * @desc Populates the help doc
- * @param {oject} ele Takes an object to make the help doc
- */
-function makeHelpViewBody(ele) {
-  const $p = $("<p></p>");
-  const $span = $("<span class='font-weight-bold'></span>")
-  if (ele.nav.hasOwnProperty("primary")) {
-    const navPrimary = document.createTextNode(ele.nav.primary);
-    $p.append(navPrimary);
-  }
-  if (ele.hasOwnProperty("fa")) {
-    const spacer = document.createTextNode(" ");
-    const $i = $("<i></i>");
-    ele.fa.forEach(ele => $i.addClass(ele));
-    $p.append($i);
-    $p.append(spacer);
-  }
-  $p.append($span);
-  $p.append(ele.text);
-  $span.append(ele.nav.sub);
-  $helpViewBody.append($p);
 }
